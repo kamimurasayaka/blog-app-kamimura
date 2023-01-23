@@ -1,0 +1,10 @@
+<div class="container">
+    <%= form_with(model: @article, url: articles_path, method: 'post', local: true) do |f| %>
+        <div>
+        <%= f.text_field :title%>
+        </div>
+        <div>
+        
+        </div>
+    <% end %>
+</div>
