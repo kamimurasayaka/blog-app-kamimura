@@ -1,9 +1,9 @@
 import $ from 'jquery'
 import axios from 'modules/axios'
 import {
-    listenInactiveHeartEvent,
-    listenActiveHeartEvent
-  } from 'modules/handle_heart'
+  listenInactiveHeartEvent,
+  listenActiveHeartEvent
+} from 'modules/handle_heart'
 
 const handleHeartDisplay = (hasLiked) => {
   if (hasLiked) {
@@ -29,12 +29,16 @@ const appendNewComment = (comment) => {
 document.addEventListener('DOMContentLoaded', () => {
   const dataset = $('#article-show').data()
   const articleId = dataset.articleId
-	@@ -20,16 +33,11 @@ document.addEventListener('DOMContentLoaded', () => {
+
+  axios.get(`/api/articles/${articleId}/comments`)
     .then((response) => {
       const comments = response.data
       comments.forEach((comment) => {
         appendNewComment(comment)
       })
+    })
+    .catch((error) => {
+      window.alert('失敗！')
     })
 
   handleCommentForm()
@@ -44,7 +48,7 @@ document.addEventListener('DOMContentLoaded', () => {
     if (!content) {
       window.alert('コメントを入力してください')
     } else {
-      axios.post(`/articles/${articleId}/comments`, {
+      axios.post(`/api/articles/${articleId}/comments`, {
         comment: {content: content}
       })
         .then((res) => {
@@ -54,12 +58,13 @@ document.addEventListener('DOMContentLoaded', () => {
         })
     }
   })
-  axios.get(`/articles/${articleId}/like`)
+
+  axios.get(`/api/articles/${articleId}/like`)
     .then((response) => {
       const hasLiked = response.data.hasLiked
       handleHeartDisplay(hasLiked)
     })
-
-    listenInactiveHeartEvent(articleId)
-    listenActiveHeartEvent(articleId)
+    
+  listenInactiveHeartEvent(articleId)
+  listenActiveHeartEvent(articleId)
 })
